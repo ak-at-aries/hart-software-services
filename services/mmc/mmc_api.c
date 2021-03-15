@@ -24,6 +24,7 @@
 
 #include "mmc_service.h"
 #include "encoding.h"
+#include "mss_gpio.h"
 #include "mss_mmc.h"
 #include "hal/hw_macros.h"
 
@@ -92,7 +93,7 @@ static bool mmc_init_emmc(void)
     SYSREG->IOMUX2_CR = LIBERO_SETTING_IOMUX2_CR_eMMC;
     SYSREG->IOMUX6_CR = LIBERO_SETTING_IOMUX6_CR_eMMC;
 
-    HW_set_uint32(SDIO_REGISTER_ADDRESS,  0);
+    MSS_GPIO_set_output(GPIO0_LO, MSS_GPIO_12, 0);
 
     static mss_mmc_cfg_t emmcConfig =
     {
@@ -122,7 +123,7 @@ static bool mmc_init_sdcard(void)
     SYSREG->IOMUX2_CR = LIBERO_SETTING_IOMUX2_CR_SD;
     SYSREG->IOMUX6_CR = LIBERO_SETTING_IOMUX6_CR_SD;
 
-    HW_set_uint32(SDIO_REGISTER_ADDRESS,  1);
+    MSS_GPIO_set_output(GPIO0_LO, MSS_GPIO_12, 1);
 
     static mss_mmc_cfg_t sdcardConfig =
     {
@@ -144,6 +145,11 @@ static bool mmc_init_sdcard(void)
 bool HSS_MMCInit(void)
 {
     bool result = false;
+
+    MSS_GPIO_init(GPIO0_LO);
+    MSS_GPIO_config(GPIO0_LO, MSS_GPIO_12, MSS_GPIO_OUTPUT_MODE);
+    MSS_GPIO_set_output(GPIO0_LO, MSS_GPIO_12, 0);
+
     mmc_reset_block();
 
 #if defined(CONFIG_SERVICE_MMC_MODE_SDCARD)
