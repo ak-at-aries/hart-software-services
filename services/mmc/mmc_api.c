@@ -52,13 +52,12 @@
 
 static void mmc_reset_block(void)
 {
-    SYSREG->SUBBLK_CLOCK_CR |= 
+    SYSREG->SUBBLK_CLOCK_CR |=
         (uint32_t)(SUBBLK_CLOCK_CR_MMC_MASK);
     SYSREG->SOFT_RESET_CR |=
         (uint32_t)(SOFT_RESET_CR_MMC_MASK);
-    SYSREG->SOFT_RESET_CR &= 
+    SYSREG->SOFT_RESET_CR &=
         ~(uint32_t)(SOFT_RESET_CR_MMC_MASK);
-
 }
 
 static bool mmc_init_common(mss_mmc_cfg_t *p_mmcConfig)
