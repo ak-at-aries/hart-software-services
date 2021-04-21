@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017-2020 Microchip Corporation.
+ * Copyright 2017-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -67,5 +67,19 @@ bool HSS_BoardInit(void)
 {
     RunInitFunctions(ARRAY_SIZE(boardInitFunctions), boardInitFunctions);
 
+    return true;
+}
+
+bool HSS_BoardLateInit(void)
+{
+#if defined(CONFIG_SERVICE_MMC_MODE_SDCARD) || defined(CONFIG_SERVICE_MMC_MODE_EMMC)
+    mHSS_DEBUG_PRINTF(LOG_WARN, "Please ensure that jumpers J34/J43 are correct for "
+#  if defined(CONFIG_SERVICE_MMC_BUS_VOLTAGE_1V8)
+        "1.8V"
+#  elif defined(CONFIG_SERVICE_MMC_BUS_VOLTAGE_3V3)
+        "3.3V"
+#  endif
+        " MMC voltage... " CRLF);
+#endif
     return true;
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019-2020 Microchip FPGA Embedded Systems Solutions.
+ * Copyright 2019-2021 Microchip FPGA Embedded Systems Solutions.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -9,7 +9,7 @@
 
 #include "drivers/mss_envm/envm.h"
 #include "drivers/mss_envm/mss_envm.h"
-#include "mpfs_hal/mss_sysreg.h"
+#include "mss_sysreg.h"
 
 static PageLatchData pageLatchData;
 static WriteRowData  writeRowData;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -10,7 +10,7 @@
  */
 
 #include "drivers/mss_pdma/mss_pdma.h"
-#include "mpfs_hal/mss_hal.h"
+#include "mss_hal.h"
 
 #ifdef __cplusplus
 extern "C" {

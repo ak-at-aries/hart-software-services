@@ -1,7 +1,7 @@
 #
 # MPFS HSS Embedded Software
 #
-# Copyright 2019 Microchip Corporation.
+# Copyright 2019-2021 Microchip Corporation.
 #
 # SPDX-License-Identifier: MIT
 #
@@ -47,9 +47,7 @@ PLATFORM_RISCV_ISA=rv64imac
 
 CORE_CFLAGS+=$(MCMODEL) -mstrict-align
 
-ifdef CONFIG_WITH_ARCH
-  CORE_CFLAGS+=-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
-endif
+CORE_CFLAGS+=-mabi=$(PLATFORM_RISCV_ABI) -march=$(PLATFORM_RISCV_ISA)
 
 # Debug options
 CORE_CFLAGS+=-g3 -DDEBUG -pipe -grecord-gcc-switches

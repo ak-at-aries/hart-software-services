@@ -2,7 +2,7 @@
  *
  * MPFS HSS Embedded Software - tools/hss-payload-generator
  *
- * Copyright 2020 Microchip Corporation.
+ * Copyright 2020-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -34,7 +34,7 @@
 
 /* elfutils-0.182 has rename EM_ARC_COMPACT2 to EM_ARCV2 */
 #ifndef EM_ARCV2
-#define EM_ARCV2 EM_ARC_COMPACT2
+#  define EM_ARCV2 EM_ARC_COMPACT2
 #endif
 
 static char const * const ClassStrings[] = {

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- * Copyright 2019-2020 Microchip FPGA Embedded Systems Solutions.
+ * Copyright 2019-2021 Microchip FPGA Embedded Systems Solutions.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -9,7 +9,7 @@
  */
 
 #include "mss_qspi.h"
-#include "mpfs_hal/mss_plic.h"
+#include "mss_plic.h"
 
 #ifdef __cplusplus
 extern "C" {

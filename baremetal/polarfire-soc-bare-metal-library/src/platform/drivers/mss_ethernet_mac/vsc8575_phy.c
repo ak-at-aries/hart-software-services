@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -11,7 +11,7 @@
  *
  */
 
-#include "mpfs_hal/mss_plic.h"
+#include "mss_plic.h"
 
 #include "drivers/mss_mac/mss_ethernet_registers.h"
 #include "drivers/mss_mac/mss_ethernet_mac_regs.h"
@@ -21,9 +21,9 @@
 
 #include "drivers/mss_mac/mss_ethernet_mac_types.h"
 
-#include "mpfs_hal/mss_plic.h"
+#include "mss_plic.h"
 #include "soc_config/hw_platform.h"
-#include "mpfs_hal/mss_coreplex.h"
+#include "mss_coreplex.h"
 
 #include "hal/hal.h"
 #include <stdlib.h>

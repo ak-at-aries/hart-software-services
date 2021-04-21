@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -16,9 +16,9 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "mss_can.h"
-#include "mpfs_hal/mss_sysreg.h"
-#include "mpfs_hal/mss_plic.h"
-#include "mpfs_hal/mss_util.h"
+#include "mss_sysreg.h"
+#include "mss_plic.h"
+#include "mss_util.h"
 
 #ifdef __cplusplus
 extern "C" {

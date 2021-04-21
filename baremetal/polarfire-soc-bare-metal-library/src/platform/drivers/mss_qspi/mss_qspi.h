@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019-2020 Microchip FPGA Embedded Systems Solutions.
+ * Copyright 2019-2021 Microchip FPGA Embedded Systems Solutions.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -176,7 +176,7 @@
 #ifndef MSS_QSPI_H_
 #define MSS_QSPI_H_             1
 
-#include "mpfs_hal/mss_plic.h"
+#include "mss_plic.h"
 #include "drivers/mss_qspi/mss_qspi_regs.h"
 
 #ifdef __cplusplus
@@ -550,7 +550,7 @@ void MSS_QSPI_get_config
     The num_idle_cycles parameter indicates the number of Idle cycles/dummy clock
     edges that must be generated after the address bytes are transmitted and
     before target memory device starts sending data. This must be correctly set
-    based on the target memory device and the SPI command being used – this may
+    based on the target memory device and the SPI command being used - this may
     also vary based on SPI clock and the way the target memory device is
     configured.
 
@@ -624,7 +624,7 @@ void MSS_QSPI_polled_transfer_block
     The num_idle_cycles parameter indicates the The number of IDLE/dummy clock
     edges that must be generated after the address bytes are transmitted and
     before target memory device starts sending data. This must be correctly set
-    based on the target memory device and the SPI command being used – this may
+    based on the target memory device and the SPI command being used - this may
     also vary based on SPI clock and the way the target memory device is
     configured.
 

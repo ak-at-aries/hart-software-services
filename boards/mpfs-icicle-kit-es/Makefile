@@ -1,7 +1,7 @@
 #
 # MPFS HSS Embedded Software
 #
-# Copyright 2019 Microchip Corporation.
+# Copyright 2019-2021 Microchip Corporation.
 #
 # SPDX-License-Identifier: MIT
 #
@@ -66,10 +66,10 @@ INCLUDES += \
 	-Ibaremetal/drivers/winbond_w25n01gv \
 
 EXTRA_SRCS-$(CONFIG_SERVICE_YMODEM) += \
-	baremetal/drivers/winbond_w25n01gv/winbond_w25n01gv.c \
 	baremetal/drivers/mss_envm/mss_envm.c
 
-#	baremetal/drivers/micron_mt25q/micron_mt25q.c \
+EXTRA_SRCS-$(CONFIG_SERVICE_QSPI) += \
+	baremetal/drivers/winbond_w25n01gv/winbond_w25n01gv.c \
 
 baremetal/drivers/winbond_w25n01gv/winbond_w25n01gv.o: baremetal/drivers/winbond_w25n01gv/winbond_w25n01gv.c config.h
 	@$(ECHO) " CC        $@";
@@ -129,9 +129,9 @@ SOC_CONFIG_FILES =  \
 	$(BOARD_DIR)/soc_config/sgmii/hw_sgmii_tip.h \
 
 #$(SOC_CONFIG_FILES): $(BOARD_DIR)/soc_config
-#$(BOARD_DIR)/soc_config: $(BOARD_DIR)/soc_fpga_design/xml/ICICLE_MSS_0.xml
+#$(BOARD_DIR)/soc_config: $(BOARD_DIR)/soc_fpga_design/xml/ICICLE_MSS_eMMC_cfg.xml
 config.h: $(SOC_CONFIG_FILES)
-$(SOC_CONFIG_FILES): $(BOARD_DIR)/soc_fpga_design/xml/ICICLE_MSS_0.xml
+$(SOC_CONFIG_FILES): $(BOARD_DIR)/soc_fpga_design/xml/ICICLE_MSS_eMMC_cfg.xml
 	@$(ECHO) " CFGGEN    $<";
 	@$(CMD_PREFIX)python3 tools/polarfire-soc-configuration-generator/mpfs_configuration_generator.py $< $(BOARD_DIR)
 

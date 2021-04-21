@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -29,7 +29,7 @@
 #include "vtss_viper_phy_prototypes.h"
 #endif
 
-#include "mpfs_hal/mss_plic.h"
+#include "mss_plic.h"
 
 #include "drivers/mss_mac/mss_ethernet_registers.h"
 #include "drivers/mss_mac/mss_ethernet_mac_regs.h"

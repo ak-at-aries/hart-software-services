@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -113,7 +113,11 @@ static void wdog_idle_handler(struct StateMachine * const pMyMachine)
 
 /////////////////
 
+#if IS_ENABLED(CONFIG_SERVICE_WDOG_ENABLE_E51)
+#  if IS_ENABLED(CONFIG_SERVICE_WDOG_DEBUG)
 static HSSTicks_t lastEntryTime = 0u;
+#  endif
+#endif
 static void wdog_monitoring_handler(struct StateMachine * const pMyMachine)
 {
     (void) pMyMachine;
@@ -126,7 +130,7 @@ static void wdog_monitoring_handler(struct StateMachine * const pMyMachine)
 #endif
 
 #if IS_ENABLED(CONFIG_SERVICE_WDOG_DEBUG)
-    if ((hartBitmask.uint) 
+    if ((hartBitmask.uint)
         && (HSS_Timer_IsElapsed(lastEntryTime,
             (HSSTicks_t)CONFIG_SERVICE_WDOG_DEBUG_TIMEOUT_SEC * TICKS_PER_SEC))) {
         lastEntryTime = HSS_GetTime();

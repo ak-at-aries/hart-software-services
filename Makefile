@@ -1,7 +1,7 @@
 #
 # MPFS HSS Embedded Software
 #
-# Copyright 2019 Microchip Corporation.
+# Copyright 2019-2021 Microchip Corporation.
 #
 # SPDX-License-Identifier: MIT
 #
@@ -127,11 +127,7 @@ EXTRA_SRCS-y += misc/stack_guard.c
 ifdef CONFIG_OPENSBI
   OPENSBI_LIBS = thirdparty/opensbi/build/lib/libsbi.a
   $(OPENSBI_LIBS):
-ifdef CONFIG_WITH_ARCH
-	+$(CMD_PREFIX)$(MAKE) CROSS_COMPILE=$(CROSS_COMPILE) CONFIG_WITH_ARCH=$(CONFIG_WITH_ARCH) PLATFORM_RISCV_ABI=$(PLATFORM_RISCV_ABI) PLATFORM_RISCV_ISA=$(PLATFORM_RISCV_ISA) -r --no-print-directory -C thirdparty/opensbi V=$(V)
-else
-	+$(CMD_PREFIX)$(MAKE) CROSS_COMPILE=$(CROSS_COMPILE) -r --no-print-directory -C thirdparty/opensbi V=$(V)
-endif
+	+$(CMD_PREFIX)$(MAKE) CROSS_COMPILE=$(CROSS_COMPILE) PLATFORM_RISCV_ABI=$(PLATFORM_RISCV_ABI) PLATFORM_RISCV_ISA=$(PLATFORM_RISCV_ISA) -r --no-print-directory -C thirdparty/opensbi V=$(V)
 
   .PHONY: $(OPENSBI_LIBS)
 else
@@ -182,3 +178,13 @@ $(RISCV_TARGET): $(OBJS) $(EXTRA_OBJS) config.h  $(DEPENDENCIES) $(LINKER_SCRIPT
 	@$(ECHO) " HEX       `basename $@ .elf`.hex";
 	$(CMD_PREFIX)$(OBJCOPY) -O ihex $(BINDIR)/$@ $(BINDIR)/`basename $@ .elf`.hex
 	$(CMD_PREFIX)$(SIZE) $(BINDIR)/$@ 2>/dev/null
+
+BOOTMODE?=1
+PACKAGE?=FCVG484
+DIE?=MPFS250T_ES
+
+program: Default/hss.elf
+	-$(CMD_PREFIX)$(RM) -r $(BINDIR)/bootmode1
+	$(CMD_PREFIX)[ "$(SC_INSTALL_DIR)" ] || ( echo "SC_INSTALL_DIR environment variable is unset"; exit 1 )
+	$(CMD_PREFIX)[ -d $(SC_INSTALL_DIR) ] || ( echo "SoftConsole subdirectory >>$(SC_INSTALL_DIR)<< does not exist."; exit 2 )
+	$(CMD_PREFIX)$(SC_INSTALL_DIR)/eclipse/jre/bin/java -jar $(SC_INSTALL_DIR)/extras/mpfs/mpfsBootmodeProgrammer.jar --workdir `pwd`/Default --die $(DIE) --package $(PACKAGE) --bootmode $(BOOTMODE)

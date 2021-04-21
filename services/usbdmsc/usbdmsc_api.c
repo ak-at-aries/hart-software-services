@@ -1,5 +1,5 @@
 /**************************************************************************//**
- * Copyright 2019 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -14,7 +14,7 @@
 
 #undef ROUNDUP
 #undef ROUNDDOWN
-#include "mpfs_hal/mss_hal.h"
+#include "mss_hal.h"
 #include "mss_assert.h"
 #include "flash_drive_app.h"
 #include "mss_plic.h"

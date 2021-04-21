@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -280,6 +280,7 @@ bool HSS_Setup_Clocks(void)
            SOFT_RESET_CR_SGMII_MASK |
 	   SOFT_RESET_CR_FIC0_MASK |
 	   SOFT_RESET_CR_FIC1_MASK |
+	   SOFT_RESET_CR_FIC2_MASK |
 	   SOFT_RESET_CR_FIC3_MASK |
 	   SOFT_RESET_CR_FPGA_MASK );
 

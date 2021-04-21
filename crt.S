@@ -1,7 +1,7 @@
 /*
  * The HSS software is released under the following software license:
  *
- * Copyright 2019-2020 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -452,31 +452,6 @@ init_memory:
 	ld	ra,8(sp)
 	addi	sp,sp,16
 	tail	.zero_section
-
-/***********************************************************************************
- *
- * The following config_copy() symbol overrides the weak symbol in the HAL and does
- * a safe copy of HW config data
- */
-        // config_copy helper function:
-        //	a0 = dest
-        //	a1 = src
-        //	a2 = length
-        .globl  config_copy
-        .type   config_copy, @function
-config_copy:
-        li      a5,0                     # initialize offset
-.check_if_config_copy_done:
-        beq     a2,a5, .config_copy_done # if offset == length, goto config_copy_done
-.do_config_copy:
-        add     a4,a1,a5                 # csrc = src + offset
-        lbu     a3,0(a4)                 # tmp = *csrc
-        add     a4,a0,a5                 # cdest = dest + offset
-        addi    a5,a5,1                  # offset = offset + 1
-        sb      a3,0(a4)                 # *cdest = *csrc
-        j       .check_if_config_copy_done
-.config_copy_done:
-        ret
 
 /***********************************************************************************
  *

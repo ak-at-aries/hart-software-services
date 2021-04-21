@@ -2,7 +2,7 @@
 #define HSS_INIT_H
 
 /*******************************************************************************
- * Copyright 2019-2020 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -56,6 +56,7 @@ bool HSS_OpenSBIInit(void);
 #endif
 
 bool HSS_DDRInit(void);
+bool HSS_DDRPrintSegConfig(void);
 bool HSS_UARTInit(void);
 #if IS_ENABLED(CONFIG_USE_LOGO)
 bool HSS_LogoInit(void);

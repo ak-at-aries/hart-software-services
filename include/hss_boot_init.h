@@ -2,7 +2,7 @@
 #define HSS_BOOT_INIT_H
 
 /*******************************************************************************
- * Copyright 2019-2020 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -39,8 +39,8 @@ bool HSS_BootInit(void);
 #  if defined(CONFIG_SERVICE_QSPI)
 void HSS_BootSelectQSPI(void);
 #endif
-#  if defined(CONFIG_SERVICE_EMMC)
-void HSS_BootSelectEMMC(void);
+#  if defined(CONFIG_SERVICE_MMC)
+void HSS_BootSelectMMC(void);
 #endif
 #  if defined(CONFIG_SERVICE_BOOT_USE_PAYLOAD)
 void HSS_BootSelectPayload(void);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019-2020 Microchip FPGA Embedded Systems Solutions.
+ * Copyright 2019-2021 Microchip FPGA Embedded Systems Solutions.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -12,12 +12,12 @@
  * BoT with Transparent SCSI command set is implemented.
  *
  */
-#include "mpfs_hal/mss_plic.h"
+#include "mss_plic.h"
 #include "mss_usb_device.h"
 #include "mss_usb_device_msd.h"
 #include "mss_assert.h"
 #include "mss_usb_std_def.h"
-#include "mpfs_hal/mss_clint.h"
+#include "mss_clint.h"
 
 #ifdef __cplusplus
 extern "C" {

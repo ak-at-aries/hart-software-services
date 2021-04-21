@@ -2,7 +2,7 @@
 #define HSS_VERSION_H
 
 /*******************************************************************************
- * Copyright 2019-2020 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -40,7 +40,7 @@ extern "C" {
 
 #define HSS_VERSION_MAJOR 0
 #define HSS_VERSION_MINOR 99
-#define HSS_VERSION_PATCH 15
+#define HSS_VERSION_PATCH 16
 
 #ifdef __cplusplus
 }

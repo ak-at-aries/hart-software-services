@@ -2,7 +2,7 @@
 #define HSS_BOARD_INIT_H
 
 /*******************************************************************************
- * Copyright 2019-2020 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -34,6 +34,7 @@ extern "C" {
 #endif
 
 bool HSS_BoardInit(void);
+bool HSS_BoardLateInit(void);
 
 #ifdef __cplusplus
 }

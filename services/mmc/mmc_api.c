@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -27,17 +27,11 @@
 #include "mss_mmc.h"
 #include "hal/hw_macros.h"
 
-#define SDIO_REGISTER_ADDRESS    0x4f000000
-
 /*
  * MMC doesn't need a "service" to run every super-loop, but it does need to be
  * initialized early...
  */
 
-
-//#if defined(CONFIG_SERVICE_MMC_MODE_EMMC) && defined(CONFIG_SERVICE_MMC_MODE_SDCARD)
-//#  error Both MMC Modes defined! These are mutually exclusive.
-//#endif
 
 #if !defined(CONFIG_SERVICE_MMC_MODE_EMMC) && !defined(CONFIG_SERVICE_MMC_MODE_SDCARD)
 #  error Unknown MMC mode (eMMC or SDcard)
@@ -47,16 +41,49 @@
 #  error Both MMC Bus Voltages defined! These are mutually exclusive.
 #endif
 
+// ---------------------------------------------------------------------------------------------
 
-#include "mpfs_hal/mss_sysreg.h"
+/*
+ * We need MSSIO settings for eMMC...
+ */
+#define LIBERO_SETTING_IOMUX1_CR_eMMC			0x11111111UL
+#define LIBERO_SETTING_IOMUX2_CR_eMMC			0x00FF1111UL
+#define LIBERO_SETTING_IOMUX6_CR_eMMC			0x00000000UL
+#define LIBERO_SETTING_MSSIO_BANK4_CFG_CR_eMMC		0x00040A0DUL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_0_1_CR_eMMC	0x09280928UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_2_3_CR_eMMC	0x09280928UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_4_5_CR_eMMC	0x09280928UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_6_7_CR_eMMC	0x09280928UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_8_9_CR_eMMC	0x09280928UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_10_11_CR_eMMC	0x09280928UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_12_13_CR_eMMC	0x09280928UL
+
+/*
+ * ... and for SDCard
+ */
+#define LIBERO_SETTING_IOMUX1_CR_SD			0x00000000UL
+#define LIBERO_SETTING_IOMUX2_CR_SD			0x00000000UL
+#define LIBERO_SETTING_IOMUX6_CR_SD			0x0000001DUL
+#define LIBERO_SETTING_MSSIO_BANK4_CFG_CR_SD		0x00080907UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_0_1_CR_SD	0x08290829UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_2_3_CR_SD	0x08290829UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_4_5_CR_SD	0x08290829UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_6_7_CR_SD	0x08290829UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_8_9_CR_SD	0x08290829UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_10_11_CR_SD	0x08290829UL
+#define LIBERO_SETTING_MSSIO_BANK4_IO_CFG_12_13_CR_SD	0x08290829UL
+
+// ---------------------------------------------------------------------------------------------
+
+#include "mss_sysreg.h"
 
 static void mmc_reset_block(void)
 {
-    SYSREG->SUBBLK_CLOCK_CR |= 
+    SYSREG->SUBBLK_CLOCK_CR |=
         (uint32_t)(SUBBLK_CLOCK_CR_MMC_MASK);
     SYSREG->SOFT_RESET_CR |=
         (uint32_t)(SOFT_RESET_CR_MMC_MASK);
-    SYSREG->SOFT_RESET_CR &= 
+    SYSREG->SOFT_RESET_CR &=
         ~(uint32_t)(SOFT_RESET_CR_MMC_MASK);
 
 }
@@ -85,26 +112,34 @@ static bool mmc_init_common(mss_mmc_cfg_t *p_mmcConfig)
 #if defined(CONFIG_SERVICE_MMC_MODE_EMMC)
 static bool mmc_init_emmc(void)
 {
-#define LIBERO_SETTING_IOMUX1_CR_eMMC   0x11111111UL
-#define LIBERO_SETTING_IOMUX2_CR_eMMC   0x00FF1111UL
-#define LIBERO_SETTING_IOMUX6_CR_eMMC   0x00000000UL
-
     SYSREG->IOMUX1_CR = LIBERO_SETTING_IOMUX1_CR_eMMC;
     SYSREG->IOMUX2_CR = LIBERO_SETTING_IOMUX2_CR_eMMC;
     SYSREG->IOMUX6_CR = LIBERO_SETTING_IOMUX6_CR_eMMC;
+    SYSREG->MSSIO_BANK4_CFG_CR = LIBERO_SETTING_MSSIO_BANK4_CFG_CR_eMMC;
+    SYSREG->MSSIO_BANK4_IO_CFG_0_1_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_0_1_CR_eMMC;
+    SYSREG->MSSIO_BANK4_IO_CFG_2_3_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_2_3_CR_eMMC;
+    SYSREG->MSSIO_BANK4_IO_CFG_4_5_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_4_5_CR_eMMC;
+    SYSREG->MSSIO_BANK4_IO_CFG_6_7_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_6_7_CR_eMMC;
+    SYSREG->MSSIO_BANK4_IO_CFG_8_9_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_8_9_CR_eMMC;
+    SYSREG->MSSIO_BANK4_IO_CFG_10_11_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_10_11_CR_eMMC;
+    SYSREG->MSSIO_BANK4_IO_CFG_12_13_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_12_13_CR_eMMC;
 
-    HW_set_uint32(SDIO_REGISTER_ADDRESS,  0);
+#if defined(CONFIG_SERVICE_SDIO_REGISTER_PRESENT)
+    HW_set_uint32(CONFIG_SERVICE_SDIO_REGISTER_ADDRESS,  0);
+#endif
 
     static mss_mmc_cfg_t emmcConfig =
     {
-        .clk_rate = MSS_MMC_CLOCK_50MHZ,
         .card_type = MSS_MMC_CARD_TYPE_MMC,
-        .bus_speed_mode = MSS_MMC_MODE_SDR,
         .data_bus_width = MSS_MMC_DATA_WIDTH_8BIT,
 #if defined(CONFIG_SERVICE_MMC_BUS_VOLTAGE_1V8)
-        .bus_voltage = MSS_MMC_1_8V_BUS_VOLTAGE
+        .bus_voltage = MSS_MMC_1_8V_BUS_VOLTAGE,
+        .clk_rate = MSS_MMC_CLOCK_200MHZ,
+        .bus_speed_mode = MSS_MMC_MODE_HS200,
 #elif defined(CONFIG_SERVICE_MMC_BUS_VOLTAGE_3V3)
-        .bus_voltage = MSS_MMC_3_3V_BUS_VOLTAGE
+        .bus_voltage = MSS_MMC_3_3V_BUS_VOLTAGE,
+        .clk_rate = MSS_MMC_CLOCK_50MHZ,
+        .bus_speed_mode = MSS_MMC_MODE_SDR,
 #endif
     };
 
@@ -115,27 +150,28 @@ static bool mmc_init_emmc(void)
 #if defined(CONFIG_SERVICE_MMC_MODE_SDCARD)
 static bool mmc_init_sdcard(void)
 {
-#define LIBERO_SETTING_IOMUX1_CR_SD   0x00000000UL
-#define LIBERO_SETTING_IOMUX2_CR_SD   0x00000000UL
-#define LIBERO_SETTING_IOMUX6_CR_SD   0x0000001DUL
-
     SYSREG->IOMUX1_CR = LIBERO_SETTING_IOMUX1_CR_SD;
     SYSREG->IOMUX2_CR = LIBERO_SETTING_IOMUX2_CR_SD;
     SYSREG->IOMUX6_CR = LIBERO_SETTING_IOMUX6_CR_SD;
+    SYSREG->MSSIO_BANK4_CFG_CR = LIBERO_SETTING_MSSIO_BANK4_CFG_CR_SD;
+    SYSREG->MSSIO_BANK4_IO_CFG_0_1_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_0_1_CR_SD;
+    SYSREG->MSSIO_BANK4_IO_CFG_2_3_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_2_3_CR_SD;
+    SYSREG->MSSIO_BANK4_IO_CFG_4_5_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_4_5_CR_SD;
+    SYSREG->MSSIO_BANK4_IO_CFG_6_7_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_6_7_CR_SD;
+    SYSREG->MSSIO_BANK4_IO_CFG_8_9_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_8_9_CR_SD;
+    SYSREG->MSSIO_BANK4_IO_CFG_10_11_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_10_11_CR_SD;
+    SYSREG->MSSIO_BANK4_IO_CFG_12_13_CR = LIBERO_SETTING_MSSIO_BANK4_IO_CFG_12_13_CR_SD;
 
-    HW_set_uint32(SDIO_REGISTER_ADDRESS,  1);
+#if defined(CONFIG_SERVICE_SDIO_REGISTER_PRESENT)
+    HW_set_uint32(CONFIG_SERVICE_SDIO_REGISTER_ADDRESS,  1);
+#endif
 
     static mss_mmc_cfg_t sdcardConfig =
     {
-        .clk_rate = MSS_MMC_CLOCK_50MHZ,
         .card_type = MSS_MMC_CARD_TYPE_SD,
-        .bus_speed_mode = MSS_SDCARD_MODE_HIGH_SPEED,
         .data_bus_width = MSS_MMC_DATA_WIDTH_4BIT,
-#if defined(CONFIG_SERVICE_MMC_BUS_VOLTAGE_1V8)
-        .bus_voltage = MSS_MMC_1_8V_BUS_VOLTAGE
-#elif defined(CONFIG_SERVICE_MMC_BUS_VOLTAGE_3V3)
-        .bus_voltage = MSS_MMC_3_3V_BUS_VOLTAGE
-#endif
+        .bus_speed_mode = MSS_SDCARD_MODE_HIGH_SPEED,
+        .clk_rate = MSS_MMC_CLOCK_50MHZ,
     };
 
     return mmc_init_common(&sdcardConfig);
@@ -171,45 +207,33 @@ bool HSS_MMCInit(void)
 // size by doing the last transfer into a sector buffer
 //
 static char runtBuffer[HSS_MMC_SECTOR_SIZE] __attribute__((aligned(sizeof(uint32_t))));
+
 bool HSS_MMC_ReadBlock(void *pDest, size_t srcOffset, size_t byteCount)
 {
-    // temporary code to bring up Icicle board
     char *pCDest = (char *)pDest;
-
-    // source and byteCount must be multiples of the sector size
-    //
-    // The MSS MMC driver uses uint32_t* as its pointer type
-    // To ensure alignment, would rather tramp through void* and
-    // assert check here
     assert(((size_t)srcOffset & (HSS_MMC_SECTOR_SIZE-1)) == 0u);
     assert(((size_t)pCDest & (sizeof(uint32_t)-1)) == 0u);
 
     uint32_t src_sector_num = (uint32_t)(srcOffset / HSS_MMC_SECTOR_SIZE);
     mss_mmc_status_t result = MSS_MMC_TRANSFER_SUCCESS;
 
-    while ((result == MSS_MMC_TRANSFER_SUCCESS) && (byteCount >= HSS_MMC_SECTOR_SIZE)) {
-        //mHSS_DEBUG_PRINTF(LOG_NORMAL, "Calling MSS_MMC_single_block_read(%lu, 0x%p) "
-        //    "(%lu bytes remaining)" CRLF, src_sector_num, pCDest, byteCount);
+    uint8_t mmc_main_plic_IRQHandler(void);
 
-        result = MSS_MMC_single_block_read(src_sector_num, (uint32_t *)pCDest);
+    uint32_t sectorByteCount = byteCount - (byteCount % HSS_MMC_SECTOR_SIZE);
 
-        if (result != MSS_MMC_TRANSFER_SUCCESS) {
-            mHSS_DEBUG_PRINTF(LOG_ERROR, "MSS_MMC_single_block_read() unexpectedly returned %d" CRLF,
-                result);
-        }
+    do {
+        result = mmc_main_plic_IRQHandler();
+    } while (MSS_MMC_TRANSFER_IN_PROGRESS == result);
 
-        if (result == MSS_MMC_TRANSFER_SUCCESS) {
-            src_sector_num++;
-            pCDest = pCDest + HSS_MMC_SECTOR_SIZE;
+    //mHSS_DEBUG_PRINTF(LOG_NORMAL, "Calling MSS_MMC_sdma_read(%lu, %p) "
+    //    "(%lu bytes remaining)" CRLF, src_sector_num, pCDest, sectorByteCount);
+    result = MSS_MMC_sdma_read(src_sector_num, (uint8_t *)pCDest, sectorByteCount);
 
-            if (byteCount < HSS_MMC_SECTOR_SIZE) {
-                ;
-            } else {
-                byteCount = byteCount - HSS_MMC_SECTOR_SIZE;
-            }
-        }
+    while (result== MSS_MMC_TRANSFER_IN_PROGRESS) {
+        result = mmc_main_plic_IRQHandler();
     }
 
+    byteCount = byteCount - sectorByteCount;
     // handle remainder
     if ((result == MSS_MMC_TRANSFER_SUCCESS) && byteCount) {
         assert(byteCount < HSS_MMC_SECTOR_SIZE);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Microchip Corporation.
+ * Copyright 2019-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -61,9 +61,9 @@ OUTPUT_ARCH( "riscv" )
  * in the MPFS.
  *
  * The most common usage will be where the reset vector for each hart will be set
- * to the start of the envm at address 0x2022_0000, giving 128K of contiguous
- * non-volatile storage. Normally this is where the initial boot-loader will
- * reside.
+ * to the start of the envm at address 0x2022_0100, giving (128KiB-256bytes) of
+ * contiguous * non-volatile storage. Normally this is where the initial
+ * boot-loader will reside.
  *
  * Libero outputs the configured reset vector address to the xml file, see
  * LIBERO_SETTING_RESET_VECTOR_HART0 etc in <hw_memory.h>
@@ -85,7 +85,7 @@ ENTRY(_start)
  */
 MEMORY
 {
-    envm (rx)          : ORIGIN = 0x20220000, LENGTH = 128k
+    envm (rx)          : ORIGIN = 0x20220100, LENGTH = (128k-256)
 
     dtim (rwx)         : ORIGIN = 0x01000000, LENGTH = 7k /* DTIM */
     switch_code (rx)   : ORIGIN = 0x01001c00, LENGTH = 1k /* This 1K of DTIM is used to run code
@@ -97,7 +97,7 @@ MEMORY
     u54_4_itim (rwx)   : ORIGIN = 0x01820000, LENGTH = 28k
     l2lim (rwx)        : ORIGIN = 0x08000000, LENGTH = 1920k
     l2zerodevice (rwx) : ORIGIN = 0x0A000000, LENGTH = 512k
-    ddr (rwx)          : ORIGIN = 0x80000000, LENGTH = 1024m
+    ddr (rwx)          : ORIGIN = 0x80000000, LENGTH = 768m
 }
 
 PROVIDE(HEAP_SIZE = 0k);               /* needs to be calculated for your application */
@@ -205,7 +205,7 @@ SECTIONS
         . = ALIGN(0x10);
         __l2_scratchpad_end = .;
         __l2_scratchpad_vma_end = .;
-    } >l2lim AT>envm
+    } >l2zerodevice AT>envm
 
 
     /*******************************************************************************

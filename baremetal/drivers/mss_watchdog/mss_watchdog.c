@@ -1,5 +1,5 @@
 /***************************************************************************//**
- * Copyright 2019-2020 Microchip FPGA Embedded Systems Solutions.
+ * Copyright 2019-2021 Microchip FPGA Embedded Systems Solutions.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -8,13 +8,13 @@
  *
  *
  */
- 
-#include "mpfs_hal/mss_hal.h"
+
+#include "mss_hal.h"
 #include "mss_watchdog.h"
 
 #ifdef __cplusplus
 extern "C" {
-#endif 
+#endif
 
 WATCHDOG_TypeDef* wdog_hw_base[10] = {(WATCHDOG_TypeDef*)0x20001000,
                                       (WATCHDOG_TypeDef*)0x20101000,

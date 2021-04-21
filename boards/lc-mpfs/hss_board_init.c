@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2017-2020 Microchip Corporation.
+ * Copyright 2017-2021 Microchip Corporation.
  *
  * SPDX-License-Identifier: MIT
  *
@@ -53,5 +53,10 @@ bool HSS_BoardInit(void)
 {
     RunInitFunctions(ARRAY_SIZE(boardInitFunctions), boardInitFunctions);
 
+    return true;
+}
+
+bool HSS_BoardLateInit(void)
+{
     return true;
 }
